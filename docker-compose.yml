@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  server:
+    build: ./server
+    env_file:
+      - .env
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    command: node src/server.js
+    depends_on:
+      - db
+    restart: always
+  client:
+    build: ./client
+    env_file:
+      - .env
+    ports:
+      - 80:80
+    depends_on:
+      - server
+    restart: always
+  db:
+    image: mongo
+    env_file:
+      - .env
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    restart: always
+    volumes:
+      - data-volume:/data/db
+volumes:
+  data-volume:
