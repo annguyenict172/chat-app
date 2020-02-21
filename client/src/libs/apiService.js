@@ -31,6 +31,9 @@ const APIService = {
   },
   getMyInfo: () => {
     return get('/api/users/me');
+  },
+  getChats: () => {
+    return get('/api/users/me/chats');
   }
 }
 

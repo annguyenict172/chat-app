@@ -1,34 +1,50 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import ChatList from './ChatList';
-import ChatDetail from './ChatDetail';
+import ChatsSection from './ChatsSection';
+import MessageSection from './MessageSection';
+
+import APIService from '../libs/apiService';
 
 const Wrapper = styled.div`
-  width: 95vw;
-  margin: 0 auto;
-`;
-
-const ChatListWrapper = styled.div`
-  width: 30%;
-  display: inline-block;
-`;
-
-const ChatDetailWrapper = styled.div`
-  width: 70%;
-  display: inline-block;
+  display: flex;
 `;
 
 class ChatPage extends React.Component {
+  state = {
+    chats: [],
+    selectedChat: null,
+  }
+
+  componentDidMount() {
+    APIService.getChats()
+      .then(res => {
+        this.setState({ 
+          chats: res.data,
+          selectedChat: res.data[0]
+        });
+      });
+  }
+
+  selectChat = (chat) => {
+    this.setState({ selectedChat: chat });
+  }
+
   render() {
+    const { chats, selectedChat } = this.state;
+    const { user } = this.props;
+
+    if (chats.length === 0) return null;
+
     return (
       <Wrapper>
-        <ChatListWrapper>
-          <ChatList />
-        </ChatListWrapper>
-        <ChatDetailWrapper>
-          <ChatDetail/>
-        </ChatDetailWrapper>
+        <ChatsSection 
+          user={user}
+          chats={chats}
+          selectedChat={selectedChat}
+          onSelectChat={this.selectChat}
+        />
+        <MessageSection />
       </Wrapper>
     )
   }

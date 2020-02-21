@@ -64,7 +64,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAuthenticated, isLoading } = this.state;
+    const { isAuthenticated, isLoading, user } = this.state;
 
     if (isLoading) return null;
 
@@ -73,7 +73,7 @@ class App extends React.Component {
         { isAuthenticated ? (
           <Switch>
             <Route path="/messages">
-              <ChatPage />
+              <ChatPage user={user} />
             </Route>
             <Redirect to="/messages"/>
           </Switch>
