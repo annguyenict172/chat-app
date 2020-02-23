@@ -33,7 +33,7 @@ const APIService = {
     return get('/api/users/me');
   },
   getChats: () => {
-    return get('/api/users/me/chats');
+    return get('/api/chats');
   },
   getMessages: (chatId) => {
     return get(`/api/chats/${chatId}/messages`);
