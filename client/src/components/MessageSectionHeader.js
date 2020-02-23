@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   display: flex;
   height: 52px;
   align-items: center;
+  border-bottom: 1px solid #eaeaea;
 `;
 
 const Button = styled.a`
@@ -33,20 +34,20 @@ const Icon = styled(FontAwesomeIcon)`
   transform: translate(-50%, -50%);
 `;
 
-const Heading = styled.span`
+const Username = styled.span`
   margin-left: 10px;
-  font-size: 25px;
+  font-size: 17px;
   font-weight: bold;
   flex-grow: 1;
 `;
 
-class ChatsSectionHeader extends React.Component {
+class MessageSectionHeader extends React.Component {
   render() {
     const { user } = this.props;
     return (
       <Wrapper>
-        <Avatar size={40} name={user.firstName}/>
-        <Heading>Chats</Heading>
+        <Avatar size={40} name={user.firstName} />
+        <Username>{user.firstName}</Username>
         <Button>
           <Icon icon={faCog} />
         </Button>
@@ -58,4 +59,4 @@ class ChatsSectionHeader extends React.Component {
   }
 }
 
-export default ChatsSectionHeader;
+export default MessageSectionHeader;

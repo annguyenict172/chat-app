@@ -7,7 +7,6 @@ import ChatList from './ChatList';
 
 const Wrapper = styled.div`
   width: 25%;
-  margin: 5px 10px 5px 10px;
   @media (max-width: 1000px) {
     width: 250px;
   }

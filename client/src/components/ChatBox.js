@@ -1,17 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Avatar from './Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faEdit } from '@fortawesome/free-solid-svg-icons';
-
-
-const Wrapper = styled.div`
-  padding: 8px 16px 8px 16px;
-  display: flex;
-  height: 52px;
-  align-items: center;
-`;
+import { faFileImage } from '@fortawesome/free-solid-svg-icons';
 
 const Button = styled.a`
   display: inline-block;
@@ -33,29 +24,39 @@ const Icon = styled(FontAwesomeIcon)`
   transform: translate(-50%, -50%);
 `;
 
-const Heading = styled.span`
-  margin-left: 10px;
-  font-size: 25px;
-  font-weight: bold;
-  flex-grow: 1;
+const Wrapper = styled.div`
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
 `;
 
-class ChatsSectionHeader extends React.Component {
+const Input = styled.input`
+  margin-left: 10px;
+  margin-right: 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 10px;
+  width: 100%;
+  flex: 1;
+  font-size: 14px;
+
+  :focus {
+    outline: none;
+  }
+`;
+
+class ChatBox extends React.Component {
   render() {
-    const { user } = this.props;
     return (
       <Wrapper>
-        <Avatar size={40} name={user.firstName}/>
-        <Heading>Chats</Heading>
         <Button>
-          <Icon icon={faCog} />
+          <Icon icon={faFileImage} />
         </Button>
-        <Button>
-          <Icon icon={faEdit} />
-        </Button>
+        <Input placeholder="Type a message..."></Input>
       </Wrapper>
     )
   }
 }
 
-export default ChatsSectionHeader;
+export default ChatBox;

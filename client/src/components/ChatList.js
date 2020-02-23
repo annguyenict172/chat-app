@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import ChatPreview from './ChatPreview';
 
 const Wrapper = styled.div`
-  margin-top: 10px;
+  padding: 8px;
+  margin-top: 5px;
 `;
-
 
 class ChatList extends React.Component {
   render() {

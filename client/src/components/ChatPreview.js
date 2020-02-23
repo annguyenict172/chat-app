@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  background-color: ${props => props.active !== false ? '#d4d4d4' : '#fff'};
+  background-color: ${props => props.active !== false ? '#e0e0e0' : '#fff'};
   border-radius: 20px;
 `;
 

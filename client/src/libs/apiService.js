@@ -34,6 +34,9 @@ const APIService = {
   },
   getChats: () => {
     return get('/api/users/me/chats');
+  },
+  getMessages: (chatId) => {
+    return get(`/api/chats/${chatId}/messages`);
   }
 }
 
