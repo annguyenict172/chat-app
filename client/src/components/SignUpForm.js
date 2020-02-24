@@ -1,7 +1,54 @@
 import React from 'react';
+import styled from 'styled-components';
+
 import APIService from '../libs/apiService';
 
-class LoginForm extends React.Component {
+const Form = styled.form`
+  margin: 0 auto;
+  width: 400px;
+  height: 500px;
+  background-color: white;
+`;
+
+const FormTitle = styled.h1`
+  margin: 0;
+  text-align: center;
+  padding-top: 25px;
+  padding-bottom: 15px;
+`;
+
+const FormGroup = styled.div`
+  margin: 0 auto;
+  width: 80%;
+  padding: 15px;
+`;
+
+const Input = styled.input`
+  padding: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+
+  :focus {
+    outline: none;
+  }
+`;
+
+const Button = styled.button`
+  padding: 15px;
+  width: 100%;
+  background: #15CD72;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+`;
+
+class SignUpForm extends React.Component {
   state = {
     formData: {
       email: '',
@@ -36,65 +83,67 @@ class LoginForm extends React.Component {
     const { formData } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
+      <Form onSubmit={this.handleSubmit}>
+        <FormTitle>
+          Sign Up
+        </FormTitle>
+
+        <FormGroup>
+          <Input
             id="email"
             name="email"
             type="email"
+            placeholder="Email address"
             value={formData.email}
             onChange={this.handleInputChange}
             required
-          >
-          </input>
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Input
             id="password"
             name="password"
             type="password"
+            placeholder="Password"
             value={formData.password}
             onChange={this.handleInputChange}
             required
-          >
-          </input>
-        </div>
-        <div>
-          <label htmlFor="firstName">First Name</label>
-          <input
-            id="firstName"
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Input
             name="firstName"
             type="text"
+            placeholder="First Name"
             value={formData.firstName}
             onChange={this.handleInputChange}
             required
-          >
-          </input>
-        </div>
-        <div>
-          <label htmlFor="lastName">Last Name</label>
-          <input
-            id="lastName"
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Input
             name="lastName"
             type="text"
+            placeholder="Last Name"
             value={formData.lastName}
             onChange={this.handleInputChange}
             required
-          >
-          </input>
-        </div>
-        <div>
-          <button
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Button
             type="submit"
           >
             Sign Up
-          </button>
-        </div>
-      </form>
+          </Button>
+        </FormGroup>
+      </Form>
     )
   }
 }
 
-export default LoginForm;
+export default SignUpForm;

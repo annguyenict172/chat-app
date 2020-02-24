@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Avatar from './Avatar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faInfo } from '@fortawesome/free-solid-svg-icons';
 
 
 const Wrapper = styled.div`
@@ -43,16 +43,29 @@ const Username = styled.span`
 
 class MessageSectionHeader extends React.Component {
   render() {
-    const { user } = this.props;
+    const { selectedChat, user } = this.props;
+    let peerName;
+
+    if (selectedChat) {
+      Object.keys(selectedChat.participantNames).forEach(userId => {
+        if (userId !== user._id) {
+          peerName = selectedChat.participantNames[userId];
+          return;
+        }
+      })
+    }
+    
     return (
       <Wrapper>
-        <Avatar size={40} name={user.firstName} />
-        <Username>{user.firstName}</Username>
+        {
+          selectedChat &&
+          <React.Fragment>
+            <Avatar size={40} name={peerName} />
+            <Username>{peerName}</Username>
+          </React.Fragment>
+        }
         <Button>
-          <Icon icon={faCog} />
-        </Button>
-        <Button>
-          <Icon icon={faEdit} />
+          <Icon icon={faInfo} />
         </Button>
       </Wrapper>
     )

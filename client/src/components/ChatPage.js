@@ -78,6 +78,7 @@ class ChatPage extends React.Component {
           onSelectChat={this.selectChat}
         />
         <MessageSection 
+          selectedChat={selectedChat}
           messages={messages}
           user={user}
           onNewMessageEntered={this.onNewMessageEntered}
