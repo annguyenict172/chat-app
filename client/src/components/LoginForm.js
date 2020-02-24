@@ -62,7 +62,7 @@ class LoginForm extends React.Component {
           </input>
         </div>
         <div>
-          <Link />
+          <Link to='/sign-up'>Don't have an account? Sign Up</Link>
           <button
             type="submit"
           >

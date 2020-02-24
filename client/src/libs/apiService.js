@@ -37,6 +37,9 @@ const APIService = {
   },
   getMessages: (chatId) => {
     return get(`/api/chats/${chatId}/messages`);
+  },
+  sendNewMessage: (chatId, text) => {
+    return post(`/api/chats/${chatId}/messages`, { text });
   }
 }
 

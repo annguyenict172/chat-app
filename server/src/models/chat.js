@@ -3,10 +3,8 @@ const Schema = mongoose.Schema;
 const { ObjectId } = mongoose.Types;
 
 const chatSchema = new Schema({
-  senderId: { type: ObjectId, required: true },
-  receivedId: { type: ObjectId, required: true },
-  senderName: { type: String, required: true, max: 20 },
-  receiverName: { type: String, required: true, max: 20 },
+  participants: [ObjectId],
+  participantNames: { type: Object, required: true },
   lastMessage: { type: String, max: 250 },
   lastMessageTimestamp: { type: Number },
   createdAt: { type: Number, required: true, default: new Date().getTime() },

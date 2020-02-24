@@ -25,15 +25,14 @@ class App extends React.Component {
       .then(res => {
         this.setState({
           user: res.data,
-          isAuthenticated: true
+          isAuthenticated: true,
+          isLoading: false
         })
       })
       .catch(error => {
         console.log(error);
-      })
-      .finally(() => {
         this.setState({
-          isLoading: false,
+          isLoading: false
         })
       })
   }
@@ -46,12 +45,12 @@ class App extends React.Component {
     }
   }
 
-  handleLogIn = (accessToken, user) => {
+  handleLogIn = (accessToken) => {
     localStorage.setItem(LocalStorageKey.ACCESS_TOKEN, accessToken);
     this.getMyInfo();
   }
 
-  handleSignUp = (accessToken, user) => {
+  handleSignUp = (accessToken) => {
     localStorage.setItem(LocalStorageKey.ACCESS_TOKEN, accessToken);
     this.getMyInfo();
   }
@@ -73,7 +72,10 @@ class App extends React.Component {
         { isAuthenticated ? (
           <Switch>
             <Route path="/messages">
-              <ChatPage user={user} />
+              <ChatPage 
+                user={user} 
+                onLogOut={this.handleLogOut}
+              />
             </Route>
             <Redirect to="/messages"/>
           </Switch>

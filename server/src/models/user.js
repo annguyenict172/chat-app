@@ -5,6 +5,7 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true, max: 30 },
   firstName: { type: String, required: true, max: 10 },
   lastName: { type: String, required: true, max: 10 },
+  fullName: { type: String, required: true, max: 20},
   passwordHash: { type: String, required: true, max: 30 },
   passwordSalt: { type: String, required: true, max: 30 },
   createdAt: { type: Number, required: true, default: new Date().getTime() },

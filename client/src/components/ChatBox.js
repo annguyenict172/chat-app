@@ -24,7 +24,7 @@ const Icon = styled(FontAwesomeIcon)`
   transform: translate(-50%, -50%);
 `;
 
-const Wrapper = styled.div`
+const Form = styled.form`
   width: 100%;
   height: 50px;
   display: flex;
@@ -47,14 +47,34 @@ const Input = styled.input`
 `;
 
 class ChatBox extends React.Component {
+  state = {
+    message: ''
+  }
+
+  onInputChange = (e) => {
+    this.setState({
+      message: e.target.value
+    });
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.props.onNewMessageEntered(this.state.message);
+    this.setState({ message: '' });
+  }
+
   render() {
     return (
-      <Wrapper>
+      <Form onSubmit={this.onSubmit}>
         <Button>
           <Icon icon={faFileImage} />
         </Button>
-        <Input placeholder="Type a message..."></Input>
-      </Wrapper>
+        <Input 
+          placeholder="Type a message..."
+          onChange={this.onInputChange}
+          value={this.state.message}
+        />
+      </Form>
     )
   }
 }

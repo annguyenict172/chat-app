@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const defaultHeaders = {
+const getDefaultHeaders = () => ({
   'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
   'Content-Type': 'application/json'
-}
+});
 
 const get = (path, params, headers = {}) => {
-  const h = { ...defaultHeaders, ...headers };
+  const h = { ...getDefaultHeaders(), ...headers };
   return axios.get(path, {
     params: params,
     headers: h
@@ -16,7 +16,7 @@ const get = (path, params, headers = {}) => {
 }
 
 const post = (path, data, headers = {}) => {
-  const h = { ...defaultHeaders, ...headers };
+  const h = { ...getDefaultHeaders(), ...headers };
   return axios.post(path, data, {
     headers: h
   })
@@ -25,7 +25,7 @@ const post = (path, data, headers = {}) => {
 }
 
 const put = (path, data, headers = {}) => {
-  const h = { ...defaultHeaders, ...headers };
+  const h = { ...getDefaultHeaders(), ...headers };
   return axios.put(path, data, {
     headers: h
   })

@@ -25,7 +25,7 @@ const Username = styled.div`
   font-size: 15px;
 `;
 
-const LatestMessage = styled.div`
+const LastMessage = styled.div`
   font-size: 12px;
   font-weight: 100;
   color: grey;
@@ -43,22 +43,30 @@ class ChatPreview extends React.Component {
 
   render() {
     const { chat, active, user } = this.props;
+    let peerName;
+    Object.keys(chat.participantNames).forEach(userId => {
+      if (userId !== user._id) {
+        peerName = chat.participantNames[userId];
+        return;
+      }
+    })
+
     return (
       <Wrapper 
         onClick={this.onSelectChat}
         active={active}
       >
         <AvatarWrapper>
-          <Avatar size={50} name={chat.senderName} />
+          <Avatar size={50} name={peerName} />
         </AvatarWrapper>
         <TextWrapper>
-          <Username>{chat.senderName}</Username>
-          <LatestMessage>
-            {chat.latestMessage} • 15:00
-          </LatestMessage>
+          <Username>{peerName}</Username>
+          <LastMessage>
+            {chat.lastMessage} • 15:00
+          </LastMessage>
         </TextWrapper>
         <SeenIcon>
-          <Avatar size={20} name={chat.senderName} />
+          <Avatar size={20} name={peerName} />
         </SeenIcon>
       </Wrapper>
     )

@@ -23,7 +23,9 @@ class MessageSection extends React.Component {
           user={user}
           messages={messages}
         />
-        <ChatBox />
+        <ChatBox 
+          onNewMessageEntered={this.props.onNewMessageEntered}
+        />
       </Wrapper>
     )
   }

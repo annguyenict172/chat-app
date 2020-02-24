@@ -30,8 +30,6 @@ services:
     restart: always
   db:
     image: mongo
-    env_file:
-      - .env
     ports:
       - ${MONGO_PORT}:${MONGO_PORT}
     restart: always

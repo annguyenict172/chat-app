@@ -24,7 +24,7 @@ class ChatPage extends React.Component {
           chats: res.data,
           selectedChat: res.data[0]
         });
-        if (getFirstChatMessages) {
+        if (getFirstChatMessages && res.data.length) {
           this.getMessages(res.data[0]._id);
         };
       });
@@ -48,15 +48,30 @@ class ChatPage extends React.Component {
     this.getMessages(chat._id);
   }
 
+  onNewMessageEntered = (message) => {
+    // Push new message into the message list
+    let messages = [...this.state.messages];
+    messages.push({
+      senderId: this.props.user._id,
+      chatId: this.state.selectedChat._id,
+      text: message
+    });
+    this.setState({
+      messages: messages
+    })
+
+    // Call API to send this message on server
+    APIService.sendNewMessage(this.state.selectedChat._id, message)
+  }
+
   render() {
     const { chats, selectedChat, messages } = this.state;
-    const { user } = this.props;
-
-    if (chats.length === 0) return null;
+    const { user, onLogOut } = this.props;
 
     return (
       <Wrapper>
         <ChatsSection 
+          onLogOut={onLogOut}
           user={user}
           chats={chats}
           selectedChat={selectedChat}
@@ -65,6 +80,7 @@ class ChatPage extends React.Component {
         <MessageSection 
           messages={messages}
           user={user}
+          onNewMessageEntered={this.onNewMessageEntered}
         />
       </Wrapper>
     )

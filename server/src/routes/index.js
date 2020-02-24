@@ -6,9 +6,8 @@ const { catchError } = require('../libs/errorHandler');
 const { requireTokenAuth } = require('../libs/auth');
 
 const { signUpByEmail, loginByEmail } = require('./auth');
-const { getInfo } = require('./info');
-const { getMyInfo } = require('./me');
-const { getChats, getMessages } = require('./chat');
+const { getMyInfo, getUsers } = require('./user');
+const { getChats, newChat, getMessages, newMessage } = require('./chat');
 
 // Sign up
 router.post('/users/signup', [
@@ -24,16 +23,22 @@ router.post('/users/login', [
   check('password').isString().isLength({ min: 6 })
 ], catchError(loginByEmail));
 
-// Get user info
-router.get('/users/:userId', catchError(requireTokenAuth(getInfo)));
-
 // Get my info
 router.get('/users/me', catchError(requireTokenAuth(getMyInfo)));
+
+// Get users
+router.get('/users', catchError(requireTokenAuth(getUsers)));
 
 // Get chats
 router.get('/chats', catchError(requireTokenAuth(getChats)));
 
+// Create new chat
+router.post('/chats', catchError(requireTokenAuth(newChat)));
+
 // Get messages
 router.get('/chats/:chatId/messages', catchError(requireTokenAuth(getMessages)));
+
+// New message
+router.post('/chats/:chatId/messages', catchError(requireTokenAuth(newMessage)));
 
 module.exports = router;

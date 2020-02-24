@@ -18,6 +18,7 @@ class Messages extends React.Component {
       <Wrapper>
         {messages.map(message => (
           <Message
+            key={message._id}
             user={user}
             message={message}
           />

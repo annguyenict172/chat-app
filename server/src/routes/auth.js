@@ -25,6 +25,7 @@ const signUpByEmail = async (req, res, next) => {
       passwordSalt: passwordSalt,
       firstName: firstName,
       lastName: lastName,
+      fullName: `${firstName} ${lastName}`, 
       dob: dob,
       gender: gender
     });
