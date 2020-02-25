@@ -25,10 +25,19 @@ const Username = styled.div`
   font-size: 15px;
 `;
 
-const LastMessage = styled.div`
+const LastMessageWrapper = styled.div`
   font-size: 12px;
   font-weight: 100;
   color: grey;
+  display: flex;
+  align-items: center;
+`;
+
+const LastMessage = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  display: inline-block;
 `;
 
 const AvatarWrapper = styled.div`
@@ -61,9 +70,9 @@ class ChatPreview extends React.Component {
         </AvatarWrapper>
         <TextWrapper>
           <Username>{peerName}</Username>
-          <LastMessage>
-            {chat.lastMessage} • 15:00
-          </LastMessage>
+          <LastMessageWrapper>
+            <LastMessage>{chat.lastMessage}</LastMessage> • 15:00
+          </LastMessageWrapper>
         </TextWrapper>
         <SeenIcon>
           <Avatar size={20} name={peerName} />

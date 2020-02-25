@@ -14,7 +14,8 @@ class ChatPage extends React.Component {
   state = {
     chats: [],
     selectedChat: null,
-    messages: []
+    messages: [],
+    newChat: false
   }
 
   getChats = (getFirstChatMessages) => {
@@ -48,7 +49,7 @@ class ChatPage extends React.Component {
     this.getMessages(chat._id);
   }
 
-  onNewMessageEntered = (message) => {
+  handleNewMessageEnter = (message) => {
     // Push new message into the message list
     let messages = [...this.state.messages];
     messages.push({
@@ -60,12 +61,108 @@ class ChatPage extends React.Component {
       messages: messages
     })
 
-    // Call API to send this message on server
-    APIService.sendNewMessage(this.state.selectedChat._id, message)
+    let { selectedChat } = this.state;
+    if (selectedChat._id === 'new') {
+      // If this chat does not exist on our database
+      APIService.createNewChat(selectedChat.participants, selectedChat.participantNames)
+        .then(res => {
+          selectedChat = {
+            ...res.data,
+            lastMessage: message,
+            lastMessageTimestamp: new Date().getTime()
+          }
+          let chats = this.state.chats.filter(chat => chat._id !== 'new');
+          
+          chats.unshift(selectedChat);
+          this.setState({
+            chats: chats,
+            selectedChat: selectedChat
+          })
+          APIService.sendNewMessage(this.state.selectedChat._id, message);
+        })
+    } else {
+      // If this chat exists already
+      selectedChat = {
+        ...selectedChat,
+        lastMessage: message,
+        lastMessageTimestamp: new Date().getTime()
+      }
+      let chats = this.state.chats.filter(chat => chat._id !== selectedChat._id);
+      
+      chats.unshift(selectedChat);
+      this.setState({
+        chats: chats,
+        selectedChat: selectedChat
+      })
+      APIService.sendNewMessage(this.state.selectedChat._id, message);
+    }
+  }
+
+  handleNewChatClick = () => {
+    let chats = [...this.state.chats];
+    const newChat = {
+      _id: 'new',
+    }
+    chats.unshift(newChat);
+    this.setState({
+      chats: chats,
+      selectedChat: newChat,
+      newChat: true,
+      messages: []
+    })
+  }
+
+  handleNewChatCancel = () => {
+    let chats = this.state.chats.filter(chat => chat._id !== 'new');
+    this.setState({
+      chats: chats,
+      newChat: false,
+    })
+    if (chats.length) {
+      this.selectChat(chats[0]);
+    } else {
+      this.setState({
+        selectedChat: null
+      })
+    }
+  }
+
+  handleSelectUser = (user) => {
+    APIService.getChats({ with: user._id })
+      .then(res => {
+        if (res.data.length > 0) {
+          // If this chat exists on our database
+          let chats = this.state.chats.filter(chat => chat._id !== 'new');
+          this.setState({
+            chats: chats,
+            newChat: false,
+          })
+          this.selectChat(res.data[0]);
+        } else {
+          // If this chat does not exist yet
+          let chats = [...this.state.chats];
+          let selectedChat;
+          for (let i = 0; i < chats.length; i++) {
+            if (chats[i]._id === 'new') {
+              chats[i].participants = [this.props.user._id, user._id];
+              chats[i].participantNames = {
+                [this.props.user._id]: this.props.user.fullName,
+                [user._id]: user.fullName
+              }
+              selectedChat = chats[i];
+            }
+            this.setState({
+              chats: chats,
+              newChat: false,
+              selectedChat: selectedChat
+            })
+          }
+        }
+      })
   }
 
   render() {
-    const { chats, selectedChat, messages } = this.state;
+    const { chats, selectedChat, messages, newChat } = this.state;
     const { user, onLogOut } = this.props;
 
     return (
@@ -76,12 +173,16 @@ class ChatPage extends React.Component {
           chats={chats}
           selectedChat={selectedChat}
           onSelectChat={this.selectChat}
+          onNewChatClick={this.handleNewChatClick}
+          onNewChatCancel={this.handleNewChatCancel}
         />
         <MessageSection 
           selectedChat={selectedChat}
           messages={messages}
           user={user}
-          onNewMessageEntered={this.onNewMessageEntered}
+          onNewMessageEntered={this.handleNewMessageEnter}
+          newChat={newChat}
+          onSelectUser={this.handleSelectUser}
         />
       </Wrapper>
     )

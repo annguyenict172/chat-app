@@ -15,12 +15,20 @@ const Wrapper = styled.div`
 
 class MessageSection extends React.Component {
   render() {
-    const { messages, user, selectedChat } = this.props;
+    const { 
+      messages, 
+      user, 
+      selectedChat, 
+      newChat,
+      onSelectUser
+    } = this.props;
     return (
       <Wrapper>
         <MessageSectionHeader 
           user={user}
-          selectedChat={selectedChat} 
+          selectedChat={selectedChat}
+          newChat={newChat}
+          onSelectUser={onSelectUser}
         />
         <Messages 
           user={user}

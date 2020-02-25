@@ -6,21 +6,21 @@ import APIService from '../libs/apiService';
 const Form = styled.form`
   margin: 0 auto;
   width: 400px;
-  height: 500px;
+  padding: 25px 0px;
   background-color: white;
+  border-radius: 5px;
 `;
 
 const FormTitle = styled.h1`
   margin: 0;
   text-align: center;
-  padding-top: 25px;
   padding-bottom: 15px;
 `;
 
 const FormGroup = styled.div`
   margin: 0 auto;
   width: 80%;
-  padding: 15px;
+  padding: 10px;
 `;
 
 const Input = styled.input`

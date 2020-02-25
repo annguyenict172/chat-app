@@ -32,14 +32,20 @@ const APIService = {
   getMyInfo: () => {
     return get('/api/users/me');
   },
-  getChats: () => {
-    return get('/api/chats');
+  getChats: (params) => {
+    return get('/api/chats', params);
   },
   getMessages: (chatId) => {
     return get(`/api/chats/${chatId}/messages`);
   },
+  createNewChat: (participants, participantNames) => {
+    return post(`api/chats`, { participants, participantNames });
+  },
   sendNewMessage: (chatId, text) => {
     return post(`/api/chats/${chatId}/messages`, { text });
+  },
+  searchUsers: (searchTerm) => {
+    return get(`/api/users?q=${searchTerm}`);
   }
 }
 

@@ -19,17 +19,27 @@ const ScrollableSection = styled.div`
 
 class ChatsSection extends React.Component {
   render() {
-    const { chats, onSelectChat, selectedChat, user, onLogOut } = this.props;
+    const { 
+      chats, 
+      onSelectChat, 
+      selectedChat, 
+      user, 
+      onLogOut,
+      onNewChatClick,
+      onNewChatCancel
+    } = this.props;
 
     return (
       <Wrapper>
         <ChatsSectionHeader 
           user={user} 
           onLogOut={onLogOut}
+          onNewChatClick={onNewChatClick}
         />
         <ScrollableSection>
           <SearchBar />
           <ChatList
+            onNewChatCancel={onNewChatCancel}
             user={user}
             chats={chats}
             onSelectChat={onSelectChat}
