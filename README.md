@@ -19,3 +19,9 @@ In addition, I made it very simple to host this application on your own by using
 Build the production version by running this command `docker-compose -f docker-compose.yml up --build`.
 
 If you wish to use an external MongoDB server, specify its URI by changing the environment variable `MONGO_URI`. Also remember to remove the `db` service in `docker-compose.yml`.
+
+### Pending Features
+- Real time messaging (for now we have to refresh in order to see new messages)
+- "Seen" functionality
+- Group chat
+- Send images on message
