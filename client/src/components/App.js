@@ -5,6 +5,8 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 import APIService from '../libs/apiService';
 import { LocalStorageKey } from '../constants';
@@ -90,6 +92,7 @@ class App extends React.Component {
             <Redirect to="/"/>
           </Switch>
         ) } 
+        <ToastContainer autoClose={3000} />
       </Router>
     );
   }
