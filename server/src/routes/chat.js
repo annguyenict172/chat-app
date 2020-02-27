@@ -71,6 +71,7 @@ const newMessage = async (req, res, next) => {
   // Update the chat
   chat.lastMessage = newMessage.text;
   chat.lastMessageTimestamp = newMessage.createdAt;
+  chat.seen = [user._id];
   await chat.save();
 
   // Send new message event through socket
@@ -104,10 +105,31 @@ const getMessages = async (req, res, next) => {
   return res.json(messages.reverse());
 }
 
+const seenChat = async (req, res, next) => {
+  const chatId = req.params.chatId;
+  const user = req._user;
+  const chat = await Chat.findOne({ _id: ObjectId(chatId) });
+
+  if (chat === undefined) {
+    return res.json({});
+  }
+  
+  if (!chat.participants.includes(user._id)) {
+    return res.json({});
+  }
+
+  await Chat.update( 
+    { _id: ObjectId(chatId) },
+    { '$addToSet': { 'seen': user._id } }
+  )
+  return res.json({});
+}
+
 module.exports = {
   getChats,
   getMessages,
   newChat,
   newMessage,
-  connectToChatService
+  connectToChatService,
+  seenChat
 }

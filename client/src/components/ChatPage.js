@@ -29,18 +29,19 @@ class ChatPage extends React.Component {
     let filteredChats = chats.filter(c => c._id !== data.chat._id)
     // Chat does not exist in current list
     if (filteredChats.length === chats.length) {
-      chats.unshift(data.chat);
+      chats = [data.chat, ...chats];
     } else {
       // Chat exists in current list
       // Active
       if (selectedChat._id === data.chat._id) {
-        messages.push(data.message);
+        messages = [...messages, data.message];
         selectedChat = data.chat;
         for (let i = 0; i < chats.length; i++) {
           if (chats[i]._id === data.chat._id) {
             chats[i] = data.chat;
           }
         }
+        this.seenChat(selectedChat);
       } else {
         // Not active
         chats = filteredChats;
@@ -70,6 +71,7 @@ class ChatPage extends React.Component {
           selectedChat: res.data[0]
         });
         if (getFirstChatMessages && res.data.length) {
+          this.seenChat(res.data[0]);
           this.getMessages(res.data[0]._id);
         };
       });
@@ -98,6 +100,23 @@ class ChatPage extends React.Component {
   selectChat = (chat) => {
     this.setState({ selectedChat: chat });
     this.getMessages(chat._id);
+    this.seenChat(chat);
+  }
+
+  seenChat = (chat) => {
+    APIService.seenChat(chat._id).then(res => {
+      let chats = [...this.state.chats];
+      for (let i = 0; i < chats.length; i++) {
+        if (chats[i]._id === chat._id) {
+          if (!chats[i].seen.includes(this.props.user._id)) {
+            chats[i].seen.push(this.props.user._id);
+          }
+        }
+      }
+      this.setState({
+        chats: chats
+      })
+    });
   }
 
   handleNewMessageEnter = (message) => {
@@ -247,6 +266,7 @@ class ChatPage extends React.Component {
           onNewChatClick={this.handleNewChatClick}
           onNewChatCancel={this.handleNewChatCancel}
           loadMoreChats={this.loadMoreChats}
+          newChat={newChat}
         />
         <MessageSection 
           selectedChat={selectedChat}

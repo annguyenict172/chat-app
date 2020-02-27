@@ -12,7 +12,8 @@ const {
   newChat, 
   getMessages, 
   newMessage, 
-  connectToChatService 
+  connectToChatService,
+  seenChat
 } = require('./chat');
 
 // Sign up
@@ -43,6 +44,9 @@ router.get('/chats', catchError(requireTokenAuth(getChats)));
 
 // Create new chat
 router.post('/chats', catchError(requireTokenAuth(newChat)));
+
+// Seen chat
+router.put('/chats/:chatId', catchError(requireTokenAuth(seenChat)));
 
 // Get messages
 router.get('/chats/:chatId/messages', catchError(requireTokenAuth(getMessages)));

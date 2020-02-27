@@ -38,6 +38,9 @@ const APIService = {
   getMessages: (chatId, offset) => {
     return get(`/api/chats/${chatId}/messages?offset=${offset}`);
   },
+  seenChat: (chatId) => {
+    return put(`/api/chats/${chatId}`);
+  },
   createNewChat: (participants, participantNames) => {
     return post(`api/chats`, { participants, participantNames });
   },

@@ -17,20 +17,21 @@ const TextWrapper = styled.div`
   flex-grow: 1
 `;
 
-const SeenIcon = styled.div`
+const NewIconWrapper = styled.div`
   margin-right: 10px;
 `;
 
 const Username = styled.div`
-  font-size: 15px;
+  font-size: ${props => props.seen ? '15px' : '15.5px'};
+  font-weight: ${props => props.seen ? '100' : 'bold'};
 `;
 
 const LastMessageWrapper = styled.div`
-  font-size: 12px;
-  font-weight: 100;
-  color: grey;
+  font-size: ${props => props.seen ? '12px' : '12.5px'};
   display: flex;
   align-items: center;
+  font-weight: ${props => props.seen ? '100' : 'bold'};
+  color: ${props => props.seen ? 'grey' : 'black'};
 `;
 
 const LastMessage = styled.span`
@@ -38,10 +39,18 @@ const LastMessage = styled.span`
   text-overflow: ellipsis;
   max-width: 150px;
   display: inline-block;
+  margin-right: 5px;
 `;
 
 const AvatarWrapper = styled.div`
   margin-left: 10px;
+`;
+
+const NewIcon = styled.div`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #0B93F6;
 `;
 
 class ChatPreview extends React.Component {
@@ -59,6 +68,7 @@ class ChatPreview extends React.Component {
         return;
       }
     })
+    const seen = chat.seen.includes(user._id);
 
     return (
       <Wrapper 
@@ -69,14 +79,16 @@ class ChatPreview extends React.Component {
           <Avatar size={50} name={peerName} />
         </AvatarWrapper>
         <TextWrapper>
-          <Username>{peerName}</Username>
-          <LastMessageWrapper>
+          <Username seen={seen}>{peerName}</Username>
+          <LastMessageWrapper seen={seen}>
             <LastMessage>{chat.lastMessage}</LastMessage> • 15:00
           </LastMessageWrapper>
         </TextWrapper>
-        <SeenIcon>
-          <Avatar size={20} name={peerName} />
-        </SeenIcon>
+        { !seen && 
+          <NewIconWrapper>
+            <NewIcon />
+          </NewIconWrapper>
+        }   
       </Wrapper>
     )
   }

@@ -7,6 +7,7 @@ const chatSchema = new Schema({
   participantNames: { type: Object, required: true },
   lastMessage: { type: String, max: 250 },
   lastMessageTimestamp: { type: Number },
+  seen: { type: [ObjectId], default: [] },
   createdAt: { type: Number, required: true, default: new Date().getTime() },
   updatedAt: { type: Number, required: true, default: new Date().getTime() },
 });

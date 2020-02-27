@@ -74,9 +74,15 @@ class ChatsSectionHeader extends React.Component {
     this.setState({ showSettingPopUp: !this.state.showSettingPopUp });
   }
 
+  onNewChatClick = () => {
+    if (!this.props.newChat) {
+      this.props.onNewChatClick();
+    }
+  }
+
   render() {
     const { showSettingPopUp } = this.state;
-    const { user, onLogOut, onNewChatClick } = this.props;
+    const { user, onLogOut } = this.props;
     return (
       <Wrapper>
         <Avatar size={40} name={user.firstName}/>
@@ -96,7 +102,7 @@ class ChatsSectionHeader extends React.Component {
           }
         </ButtonWrapper>
         <ButtonWrapper>
-          <Button onClick={onNewChatClick}>
+          <Button onClick={this.onNewChatClick} >
             <Icon icon={faEdit} />
           </Button>
         </ButtonWrapper>

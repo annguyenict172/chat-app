@@ -33,12 +33,14 @@ class ChatsSection extends React.Component {
       user, 
       onLogOut,
       onNewChatClick,
-      onNewChatCancel
+      onNewChatCancel,
+      newChat
     } = this.props;
 
     return (
       <Wrapper>
         <ChatsSectionHeader 
+          newChat={newChat}
           user={user} 
           onLogOut={onLogOut}
           onNewChatClick={onNewChatClick}
