@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   display: flex;
   height: 52px;
   align-items: center;
+  border-bottom: 1px solid #eaeaea;
 `;
 
 const ButtonWrapper = styled.div`
