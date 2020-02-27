@@ -22,7 +22,7 @@ const TimeDivider = styled.div`
   color: grey;
   width: 100%;
   text-align: center;
-  padding: 10px 0px;
+  padding: 10px 0px 20px 0px;
 `;
 
 class Messages extends React.Component {
@@ -33,7 +33,14 @@ class Messages extends React.Component {
       this.scrollToBottom();
     } else if (prevProps.messages[0] !== this.props.messages[0]) {
       const numOfNewMessages = this.props.messages.length - prevProps.messages.length;
-      this.wrapper.scrollTop = 50 * (numOfNewMessages);
+      let numOfMessageDividers = 0;
+      for (let i = 0; i <= numOfNewMessages; i++) {
+        if (i === 0) continue;
+        if (!isSameDate(this.props.messages[i].createdAt, this.props.messages[i-1].createdAt)) {
+          numOfMessageDividers++;
+        }
+      }
+      this.wrapper.scrollTop = 50 * (numOfNewMessages) + 45 * (numOfMessageDividers);
     }
   }
 
