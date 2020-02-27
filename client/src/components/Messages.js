@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Message from './Message';
+import { getMessageDividerTimeString, isSameDate } from '../libs/datetime';
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,6 +15,14 @@ const Wrapper = styled.div`
 const MessageEndHook = styled.div`
   height: 0;
   width: 0;
+`;
+
+const TimeDivider = styled.div`
+  font-size: 12px;
+  color: grey;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0px;
 `;
 
 class Messages extends React.Component {
@@ -46,13 +55,29 @@ class Messages extends React.Component {
         onScroll={this.onScroll}
         ref={(el) => { this.wrapper = el; }}
       >
-        {messages.map(message => (
-          <Message
-            key={message._id}
-            user={user}
-            message={message}
-          />
-        ))}
+        {messages.map((message, index) => {
+          if (index === 0 || !isSameDate(messages[index - 1].createdAt, message.createdAt)) {
+            return (
+              <React.Fragment key={message._id}>
+                <TimeDivider>
+                  {getMessageDividerTimeString(message.createdAt)}
+                </TimeDivider>
+                <Message
+                  user={user}
+                  message={message}
+                />
+              </React.Fragment>
+            )
+          } else {
+            return (
+              <Message
+                key={message._id}
+                user={user}
+                message={message}
+              />
+            )
+          }
+        })}
         <MessageEndHook ref={(el) => { this.messagesEnd = el; }} />
       </Wrapper>
     )

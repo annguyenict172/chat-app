@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Avatar from './Avatar';
+import { getLastMessageTimeString } from '../libs/datetime';
 
 const Wrapper = styled.div`
   height: 65px;
@@ -81,7 +82,7 @@ class ChatPreview extends React.Component {
         <TextWrapper>
           <Username seen={seen}>{peerName}</Username>
           <LastMessageWrapper seen={seen}>
-            <LastMessage>{chat.lastMessage}</LastMessage> • 15:00
+            <LastMessage>{chat.lastMessage}</LastMessage> • {getLastMessageTimeString(chat.lastMessageTimestamp)}
           </LastMessageWrapper>
         </TextWrapper>
         { !seen && 
