@@ -20,7 +20,8 @@ class MessageSection extends React.Component {
       user, 
       selectedChat, 
       newChat,
-      onSelectUser
+      onSelectUser,
+      loadMoreMessages
     } = this.props;
     return (
       <Wrapper>
@@ -33,6 +34,7 @@ class MessageSection extends React.Component {
         <Messages 
           user={user}
           messages={messages}
+          loadMoreMessages={loadMoreMessages}
         />
         <ChatBox 
           onNewMessageEntered={this.props.onNewMessageEntered}

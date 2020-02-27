@@ -5,10 +5,15 @@ import ChatsSection from './ChatsSection';
 import MessageSection from './MessageSection';
 
 import APIService from '../libs/apiService';
+import chatService from '../libs/chatService';
 
 const Wrapper = styled.div`
   display: flex;
 `;
+
+const generateRandomString = (length) => {
+  return Math.random().toString(36).substr(2, length);
+}
 
 class ChatPage extends React.Component {
   state = {
@@ -16,6 +21,45 @@ class ChatPage extends React.Component {
     selectedChat: null,
     messages: [],
     newChat: false
+  }
+
+  handleComingMessage = (data) => {
+    let { chats, selectedChat, messages } = this.state;
+
+    let filteredChats = chats.filter(c => c._id !== data.chat._id)
+    // Chat does not exist in current list
+    if (filteredChats.length === chats.length) {
+      chats.unshift(data.chat);
+    } else {
+      // Chat exists in current list
+      // Active
+      if (selectedChat._id === data.chat._id) {
+        messages.push(data.message);
+        selectedChat = data.chat;
+        for (let i = 0; i < chats.length; i++) {
+          if (chats[i]._id === data.chat._id) {
+            chats[i] = data.chat;
+          }
+        }
+      } else {
+        // Not active
+        chats = filteredChats;
+        chats.unshift(data.chat);
+      }
+    }
+    this.setState({
+      chats: chats,
+      selectedChat: selectedChat,
+      messages: messages
+    })
+  }
+
+  connectToChatService = () => {
+    APIService.connectToChatService()
+      .then((res) => {
+        chatService.connect(this.props.user._id);
+        chatService.addListener(this.handleComingMessage);
+      })
   }
 
   getChats = (getFirstChatMessages) => {
@@ -32,7 +76,8 @@ class ChatPage extends React.Component {
   }
 
   getMessages = (chatId) => {
-    APIService.getMessages(chatId)
+    const offset = this.state.messages.length;
+    APIService.getMessages(chatId, 0)
       .then(res => {
         this.setState({ 
           messages: res.data,
@@ -41,7 +86,13 @@ class ChatPage extends React.Component {
   }
 
   componentDidMount() {
+    this.connectToChatService();
     this.getChats(true);
+  }
+
+  componentWillUnmount() {
+    chatService.removeListener(this.handleComingMessage);
+    chatService.disconnect();
   }
 
   selectChat = (chat) => {
@@ -53,6 +104,7 @@ class ChatPage extends React.Component {
     // Push new message into the message list
     let messages = [...this.state.messages];
     messages.push({
+      _id: generateRandomString(12),
       senderId: this.props.user._id,
       chatId: this.state.selectedChat._id,
       text: message
@@ -161,6 +213,25 @@ class ChatPage extends React.Component {
       })
   }
 
+  loadMoreMessages = () => {
+    const offset = this.state.messages.length;
+    APIService.getMessages(this.state.selectedChat._id, offset)
+      .then(res => {
+        this.setState({ 
+          messages: [...res.data, ...this.state.messages],
+        });
+      });
+  }
+
+  loadMoreChats = () => {
+    APIService.getChats({ offset: this.state.chats.length })
+      .then(res => {
+        this.setState({ 
+          chats: [...this.state.chats, ...res.data],
+        });
+      });
+  }
+
   render() {
     const { chats, selectedChat, messages, newChat } = this.state;
     const { user, onLogOut } = this.props;
@@ -175,6 +246,7 @@ class ChatPage extends React.Component {
           onSelectChat={this.selectChat}
           onNewChatClick={this.handleNewChatClick}
           onNewChatCancel={this.handleNewChatCancel}
+          loadMoreChats={this.loadMoreChats}
         />
         <MessageSection 
           selectedChat={selectedChat}
@@ -183,6 +255,7 @@ class ChatPage extends React.Component {
           onNewMessageEntered={this.handleNewMessageEnter}
           newChat={newChat}
           onSelectUser={this.handleSelectUser}
+          loadMoreMessages={this.loadMoreMessages}
         />
       </Wrapper>
     )

@@ -18,6 +18,13 @@ const ScrollableSection = styled.div`
 `;
 
 class ChatsSection extends React.Component {
+  onScroll = (e) => {
+    const atBottom = e.target.clientHeight + e.target.scrollTop === e.target.scrollHeight;
+    if (atBottom) {
+      this.props.loadMoreChats();
+    }
+  }
+
   render() {
     const { 
       chats, 
@@ -36,8 +43,8 @@ class ChatsSection extends React.Component {
           onLogOut={onLogOut}
           onNewChatClick={onNewChatClick}
         />
-        <ScrollableSection>
-          <SearchBar />
+        <ScrollableSection onScroll={this.onScroll}>
+          {/* <SearchBar /> */}
           <ChatList
             onNewChatCancel={onNewChatCancel}
             user={user}

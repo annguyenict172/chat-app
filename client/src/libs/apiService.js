@@ -35,8 +35,8 @@ const APIService = {
   getChats: (params) => {
     return get('/api/chats', params);
   },
-  getMessages: (chatId) => {
-    return get(`/api/chats/${chatId}/messages`);
+  getMessages: (chatId, offset) => {
+    return get(`/api/chats/${chatId}/messages?offset=${offset}`);
   },
   createNewChat: (participants, participantNames) => {
     return post(`api/chats`, { participants, participantNames });
@@ -46,6 +46,9 @@ const APIService = {
   },
   searchUsers: (searchTerm) => {
     return get(`/api/users?q=${searchTerm}`);
+  },
+  connectToChatService: () => {
+    return post('/api/chats/connect');
   }
 }
 
