@@ -28,14 +28,10 @@ class App extends React.Component {
         this.setState({
           user: res.data,
           isAuthenticated: true,
-          isLoading: false
         })
       })
-      .catch(error => {
-        console.log(error);
-        this.setState({
-          isLoading: false
-        })
+      .finally(() => {
+        this.setState({ isLoading: false })
       })
   }
 

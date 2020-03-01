@@ -102,12 +102,10 @@ function MessageSectionHeader(props) {
   useEffect(
     () => {
       if (debouncedSearchTerm) {
-        APIService.searchUsers(debouncedSearchTerm).then(res => {
+        APIService.searchUsers(debouncedSearchTerm)
+        .then(res => {
           setResults(res.data);
-        });
-        setTimeout(() => {
-          console.log(searchTerm);
-        }, 300)
+        })
       } else {
         setResults([]);
       }

@@ -43,7 +43,10 @@ router.post('/chats/connect', catchError(requireTokenAuth(connectToChatService))
 router.get('/chats', catchError(requireTokenAuth(getChats)));
 
 // Create new chat
-router.post('/chats', catchError(requireTokenAuth(newChat)));
+router.post('/chats', [
+  check('participants').isArray(),
+  check('participantNames').exists()
+], catchError(requireTokenAuth(newChat)));
 
 // Seen chat
 router.put('/chats/:chatId', catchError(requireTokenAuth(seenChat)));
@@ -52,6 +55,8 @@ router.put('/chats/:chatId', catchError(requireTokenAuth(seenChat)));
 router.get('/chats/:chatId/messages', catchError(requireTokenAuth(getMessages)));
 
 // New message
-router.post('/chats/:chatId/messages', catchError(requireTokenAuth(newMessage)));
+router.post('/chats/:chatId/messages', [
+  check('text').isString().isLength({ max: 250 })
+], catchError(requireTokenAuth(newMessage)));
 
 module.exports = router;

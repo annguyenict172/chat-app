@@ -57,10 +57,10 @@ class ChatPage extends React.Component {
 
   connectToChatService = () => {
     APIService.connectToChatService()
-      .then((res) => {
+      .then(res => {
         chatService.connect(this.props.user._id);
         chatService.addListener(this.handleComingMessage);
-      })
+      });
   }
 
   getChats = (getFirstChatMessages) => {

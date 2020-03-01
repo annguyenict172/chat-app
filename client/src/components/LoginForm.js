@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { toast } from 'react-toastify';
 
 import APIService from '../libs/apiService';
 
@@ -68,13 +67,7 @@ class LoginForm extends React.Component {
     const { formData } = this.state;
     APIService.login(formData)
       .then((res) => {
-        if (res.status === 200) {
-          this.props.onLoginSuccess(res.data.accessToken, res.data.user);
-        } else {
-          toast.error(res.data.errorMessage);
-        }
-      }, (error) => {
-        toast.error(error);
+        this.props.onLoginSuccess(res.data.accessToken, res.data.user);
       })
   }
 

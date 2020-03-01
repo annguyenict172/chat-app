@@ -1,6 +1,7 @@
 const { Chat, Message } = require('../models');
 const { ObjectId } = require('mongoose').Types;
 const chatService = require('../libs/chatService');
+const errors = require('../libs/errors');
 
 const connectToChatService = async (req, res, next) => {
   chatService.saveUserConnection(req._user._id);
@@ -31,12 +32,16 @@ const newChat = async (req, res, next) => {
   let participantNames = req.body.participantNames;
 
   if (!participants.includes(user._id.toString())) {
-    return res.json({});
+    return res.jsonError(
+      errors.forbiddenError()
+    );
   }
   // Check if there exists a chat thread between these participants
   const chats = await Chat.find( { participants: { $all: participants } } );
   if (chats.length) {
-    return res.json({});
+    return res.jsonError(
+      errors.badRequestError('A chat thread between these people already exists')
+    );
   }
 
   const newChat = new Chat({
@@ -52,11 +57,15 @@ const newMessage = async (req, res, next) => {
   const user = req._user;
 
   if (chat === undefined) {
-    return res.json({});
+    return res.jsonError(
+      errors.notFoundError('Cannot find a chat with the provided ID')
+    );
   }
   // Check if this user has the permission to send a message in this chat thread
   if (!chat.participants.includes(user._id)) {
-    return res.json({});
+    return res.jsonError(
+      errors.forbiddenError()
+    );
   }
   
   const text = req.body.text;
@@ -91,11 +100,15 @@ const getMessages = async (req, res, next) => {
   const chat = await Chat.findOne({ _id: ObjectId(chatId) });
 
   if (chat === undefined) {
-    return res.json([]);
+    return res.jsonError(
+      errors.notFoundError('Cannot find a chat with the provided ID')
+    );
   }
   // Check if this user has the permission to send a message in this chat thread
   if (!chat.participants.includes(user._id)) {
-    return res.json([]);
+    return res.jsonError(
+      errors.forbiddenError()
+    );
   }
 
   const messages = await Message.find({ chatId: chatId })
@@ -111,11 +124,15 @@ const seenChat = async (req, res, next) => {
   const chat = await Chat.findOne({ _id: ObjectId(chatId) });
 
   if (chat === undefined) {
-    return res.json({});
+    return res.jsonError(
+      errors.notFoundError('Cannot find a chat with the provided ID')
+    );
   }
   
   if (!chat.participants.includes(user._id)) {
-    return res.json({});
+    return res.jsonError(
+      errors.forbiddenError()
+    );
   }
 
   await Chat.update( 

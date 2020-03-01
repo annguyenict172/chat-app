@@ -10,7 +10,7 @@ const getUsers = async (req, res, next) => {
   if (query === '') return res.json([]);
 
   const re = new RegExp(query, 'g');
-  const users = await User.find( { $or:[ { fullName: re }, { email: re } ]} );
+  const users = await User.find( { $or:[ { fullName: re }, { email: re } ]} ).limit(10);
   return res.json(users);
 }
 

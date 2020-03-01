@@ -38,9 +38,9 @@ const errors = {
     HTTP_STATUS.BAD_REQUEST,
     errorMessage
   ),
-  forbiddenError: () => new Error(
+  forbiddenError: (errorMessage) => new Error(
     HTTP_STATUS.FORBIDDEN,
-    'Invalid Access'
+    errorMessage ? errorMessage : 'Invalid Access'
   ),
   validationError: (errorData) => new Error(
     HTTP_STATUS.BAD_REQUEST,
@@ -50,6 +50,10 @@ const errors = {
   unverifiedAccountError: () => new Error(
     HTTP_STATUS.FORBIDDEN,
     'Your account is not yet verified.'
+  ),
+  notFoundError: (errorMessage) => new Error(
+    HTTP_STATUS.NOT_FOUND,
+    errorMessage ? errorMessage : 'Not Found'
   )
 };
 

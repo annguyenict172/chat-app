@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { toast } from 'react-toastify';
 
 import APIService from '../libs/apiService';
 
@@ -69,14 +68,8 @@ class SignUpForm extends React.Component {
     e.preventDefault();
     const { formData } = this.state;
     APIService.signUp(formData)
-      .then((res) => {
-        if (res.status === 200) {
-          this.props.onSignUpSuccess(res.data.accessToken, res.data.user);
-        } else {
-          toast.error(res.data.errorMessage);
-        }
-      }, (error) => {
-        toast.error(error);
+      .then(res => {
+        this.props.onSignUpSuccess(res.data.accessToken, res.data.user);
       })
   }
 
