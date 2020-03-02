@@ -39,7 +39,7 @@ class Messages extends React.Component {
       return;
     } else if (prevProps.messages.length === 0 && this.props.messages.length > 0) {
       this.scrollToBottom();
-    } else if (prevProps.messages.length && prevProps.messages[0].chatId === this.props.messages[0].chatId) {
+    } else if (prevProps.messages.length && prevProps.messages[0].chatId !== this.props.messages[0].chatId) {
       this.scrollToBottom();
     } else if (
       prevProps.messages[prevProps.messages.length - 1] !== this.props.messages[this.props.messages.length - 1]

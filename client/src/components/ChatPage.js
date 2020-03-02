@@ -169,6 +169,7 @@ class ChatPage extends React.Component {
         ...selectedChat,
         lastMessage: message,
         lastMessageTimestamp: new Date().getTime(),
+        seen: [this.props.user._id]
       }      
     }
 
