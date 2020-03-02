@@ -11,19 +11,12 @@ const Circle = styled.div`
   width: ${props => `${props.size}px`};
   height: ${props => `${props.size}px`};
   border-radius: 50%;
+  overflow: hidden;
 `;
 
-
-const InitialCharName = styled.span`
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  color: black;
-  font-size: ${props => `${props.size * 0.5}px`};
-  font-weight: bold;
+const Image = styled.img`
+  height: 100%;
+  width: 100%;
 `;
 
 const DefaultUserIcon = styled(FontAwesomeIcon)`
@@ -39,14 +32,16 @@ const DefaultUserIcon = styled(FontAwesomeIcon)`
 
 class Avatar extends React.Component {
   render() {
-    const { size, name } = this.props;
+    const { size, userId } = this.props;
+    let imageSource;
+    if (userId) {
+      imageSource = `https://res.cloudinary.com/dznlmu2gs/image/upload/${userId}.jpg`;
+    }
 
     return (
       <Circle size={size}>
-        { name ? (
-          <InitialCharName size={size}>
-            {name[0]}
-          </InitialCharName>
+        { userId ? (
+          <Image src={imageSource} />
         ) : (
           <DefaultUserIcon icon={faUser} size="lg" />
         )}

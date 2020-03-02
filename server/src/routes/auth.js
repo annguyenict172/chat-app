@@ -2,9 +2,11 @@ const { User } = require('../models');
 const { createAuthToken } = require('../libs/auth');
 const pw = require('../libs/pw');
 const errors = require('../libs/errors');
+const { uploadImage } = require('../libs/imageUpload');
 
 const signUpByEmail = async (req, res, next) => {
-  const { email, password, firstName, lastName, dob, gender } = req.body;
+  const { email, password, firstName, lastName } = req.body;
+  const avatar = req.file;
 
   // Check if this email has been used
   const user = await User.findOne({ email: email });
@@ -26,12 +28,12 @@ const signUpByEmail = async (req, res, next) => {
       firstName: firstName,
       lastName: lastName,
       fullName: `${firstName} ${lastName}`, 
-      dob: dob,
-      gender: gender
     });
 
     // Save the user to database
     await newUser.save();
+
+    await uploadImage(avatar.path, newUser._id.toString());
 
     return res.json({ 
       accessToken: createAuthToken(newUser),

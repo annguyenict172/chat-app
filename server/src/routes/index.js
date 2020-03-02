@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('multer')({ dest: 'uploads/' });
 const { check } = require('express-validator');
 
 const { catchError } = require('../libs/errorHandler');
@@ -17,7 +18,7 @@ const {
 } = require('./chat');
 
 // Sign up
-router.post('/users/signup', [
+router.post('/users/signup', upload.single('avatar'), [
   check('email').isEmail(),
   check('firstName').isString().isLength({ min: 1 }),
   check('lastName').isString().isLength({ min: 1 }),

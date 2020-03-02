@@ -30,7 +30,7 @@ const LoginLinkWrapper = styled.div`
 
 const Hidden = styled.div`
   visibility: hidden;
-  padding-top: 12vh;
+  padding-top: 7vh;
 `;
 
 class SignUpPage extends React.Component {

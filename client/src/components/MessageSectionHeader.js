@@ -120,24 +120,20 @@ function MessageSectionHeader(props) {
     onSelectUser
   } = props;
 
+  if (selectedChat == null && !newChat) return <Wrapper></Wrapper>;
+
   if (!newChat) {
-    let peerName;
-    if (selectedChat && selectedChat.participantNames) {
-      Object.keys(selectedChat.participantNames).forEach(userId => {
-        if (userId !== user._id) {
-          peerName = selectedChat.participantNames[userId];
-          return;
-        }
-      })
-    }
+    let peerIds = selectedChat.participants.filter(p => p !== user._id);
+    let peerNames = peerIds.map(id => selectedChat.participantNames[id]);
+    const chatName = peerNames.join(', ');
     
     return (
       <Wrapper>
         {
           selectedChat &&
           <React.Fragment>
-            <Avatar size={40} name={peerName} />
-            <Username>{peerName}</Username>
+            <Avatar size={40} userId={peerIds[0]} />
+            <Username>{chatName}</Username>
             <Button>
               <Icon icon={faInfo} />
             </Button>
@@ -164,7 +160,7 @@ function MessageSectionHeader(props) {
                     key={user._id} 
                     onClick={() => onSelectUser(user)}
                   >
-                    <Avatar size={40} name={user.firstName} /> 
+                    <Avatar size={40} userId={user._id} /> 
                     <Name>{user.firstName} {user.lastName}</Name> 
                     <Email>({user.email})</Email>
                   </Result>

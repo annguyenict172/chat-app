@@ -86,7 +86,7 @@ class ChatsSectionHeader extends React.Component {
     const { user, onLogOut } = this.props;
     return (
       <Wrapper>
-        <Avatar size={40} name={user.firstName}/>
+        <Avatar size={40} userId={user._id}/>
         <Heading>Chats</Heading>
         <ButtonWrapper>
           <Button onClick={this.onSettingClick}>

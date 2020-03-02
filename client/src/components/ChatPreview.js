@@ -22,7 +22,7 @@ const IconWrapper = styled.div`
   margin-right: 10px;
 `;
 
-const Username = styled.div`
+const ChatName = styled.div`
   font-size: ${props => props.seen ? '15px' : '15.5px'};
   font-weight: ${props => props.seen ? '100' : 'bold'};
 `;
@@ -62,17 +62,11 @@ class ChatPreview extends React.Component {
 
   render() {
     const { chat, active, user } = this.props;
-    let peerName;
-    let peerId;
-    Object.keys(chat.participantNames).forEach(userId => {
-      if (userId !== user._id) {
-        peerName = chat.participantNames[userId];
-        peerId = userId;
-        return;
-      }
-    })
+    let peerIds = chat.participants.filter(p => p !== user._id);
+    let peerNames = peerIds.map(id => chat.participantNames[id]);
     const iHaveSeen = chat.seen.includes(user._id);
-    const peerHasSeen = chat.seen.includes(peerId);
+    const peerHasSeen = chat.seen.includes(peerIds[0]);
+    const chatName = peerNames.join(', ');
 
     return (
       <Wrapper 
@@ -80,10 +74,10 @@ class ChatPreview extends React.Component {
         active={active}
       >
         <AvatarWrapper>
-          <Avatar size={50} name={peerName} />
+          <Avatar size={50} userId={peerIds[0]} />
         </AvatarWrapper>
         <TextWrapper>
-          <Username seen={iHaveSeen}>{peerName}</Username>
+          <ChatName seen={iHaveSeen}>{chatName}</ChatName>
           <LastMessageWrapper seen={iHaveSeen}>
             <LastMessage>{chat.lastMessage}</LastMessage> • {getLastMessageTimeString(chat.lastMessageTimestamp)}
           </LastMessageWrapper>
@@ -95,7 +89,7 @@ class ChatPreview extends React.Component {
         }
         { iHaveSeen && peerHasSeen && 
           <IconWrapper>
-            <Avatar size={20} name={peerName}/>
+            <Avatar size={15} userId={peerIds[0]} />
           </IconWrapper>
         }      
       </Wrapper>

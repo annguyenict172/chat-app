@@ -12,7 +12,8 @@ class ChatService {
   }
 
   connect(userId) {
-    this.socket = socketIOClient.connect(`http://localhost:4000/${userId}`);
+    const endpoint = `${process.env.REACT_APP_SOCKET_IO_HOST}/${userId}`;
+    this.socket = socketIOClient.connect(endpoint);
 
     Object.keys(ChatEvent).forEach(ceKey => {
       this.socket.on(ChatEvent[ceKey], (data) => {

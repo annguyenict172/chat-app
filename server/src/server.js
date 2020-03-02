@@ -1,9 +1,9 @@
 const app = require('express')();
 const server = require('http').Server(app);
-const chatService = require('./libs/chatService');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const chatService = require('./libs/chatService');
 const routes = require('./routes');
 
 // Middleware

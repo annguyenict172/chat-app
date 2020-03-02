@@ -53,7 +53,8 @@ class LoginForm extends React.Component {
     formData: {
       email: '',
       password: ''
-    }
+    },
+    isLoading: false
   }
 
   handleInputChange = (e) => {
@@ -65,14 +66,18 @@ class LoginForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { formData } = this.state;
+    this.setState({ isLoading: true });
     APIService.login(formData)
       .then((res) => {
         this.props.onLoginSuccess(res.data.accessToken, res.data.user);
       })
+      .finally(() => {
+        this.setState({ isLoading: false });
+      })
   }
 
   render() {
-    const { formData } = this.state;
+    const { formData, isLoading } = this.state;
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -106,9 +111,10 @@ class LoginForm extends React.Component {
 
         <FormGroup>
           <Button
+            disabled={isLoading}
             type="submit"
           >
-            Log In
+            { isLoading ? 'Logging In...' : 'Log In' }
           </Button>
         </FormGroup>
       </Form>

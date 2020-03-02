@@ -35,7 +35,9 @@ const SeenIndicator = styled.span`
 
 class Messages extends React.Component {
   componentDidUpdate(prevProps, prevStates) {
-    if (prevProps.messages.length === 0 && this.props.messages.length > 0) {
+    if (this.props.messages.length === 0) {
+      return;
+    } else if (prevProps.messages.length === 0 && this.props.messages.length > 0) {
       this.scrollToBottom();
     } else if (prevProps.messages.length && prevProps.messages[0].chatId === this.props.messages[0].chatId) {
       this.scrollToBottom();

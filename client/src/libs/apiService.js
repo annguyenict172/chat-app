@@ -9,22 +9,13 @@ const APIService = {
     })
   },
   signUp: (data) => {
-    const {
-      email,
-      password,
-      firstName,
-      lastName,
-      dob,
-      gender
-    } = data;
-    return post('/api/users/signup', {
-      email: email,
-      password: password,
-      firstName: firstName,
-      lastName: lastName,
-      dob: dob,
-      gender: gender
-    })
+    const formData = new FormData();
+    formData.set('email', data.email);
+    formData.set('password', data.password);
+    formData.set('firstName', data.firstName);
+    formData.set('lastName', data.lastName);
+    formData.set('avatar', data.avatar);
+    return post('/api/users/signup', formData, { 'Content-Type': 'multipart/form-data' });
   },
   getUserInfo: (userId) => {
     return get(`/api/users/${userId}`);

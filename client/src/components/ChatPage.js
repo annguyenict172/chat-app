@@ -97,7 +97,6 @@ class ChatPage extends React.Component {
   }
 
   getMessages = (chatId) => {
-    const offset = this.state.messages.length;
     APIService.getMessages(chatId, 0)
       .then(res => {
         this.setState({ 
@@ -139,7 +138,7 @@ class ChatPage extends React.Component {
     });
   }
 
-  handleNewMessageEnter = (message) => {
+  handleNewMessageEnter = async (message) => {
     // Push new message into the message list
     let messages = [...this.state.messages];
     messages.push({
@@ -152,42 +151,33 @@ class ChatPage extends React.Component {
       messages: messages
     })
 
-    let { selectedChat } = this.state;
+    let selectedChat = { ...this.state.selectedChat };
+    let chats = this.state.chats.filter(chat => chat._id !== selectedChat._id);
+
     if (selectedChat._id === 'new') {
       // If this chat does not exist on our database
-      APIService.createNewChat(selectedChat.participants, selectedChat.participantNames)
-        .then(res => {
-          selectedChat = {
-            ...res.data,
-            lastMessage: message,
-            lastMessageTimestamp: new Date().getTime()
-          }
-          let chats = this.state.chats.filter(chat => chat._id !== 'new');
-          
-          chats.unshift(selectedChat);
-          this.setState({
-            chats: chats,
-            selectedChat: selectedChat
-          })
-          APIService.sendNewMessage(this.state.selectedChat._id, message);
-        })
+      const res = await APIService.createNewChat(selectedChat.participants, selectedChat.participantNames);
+      selectedChat = {
+        ...res.data,
+        lastMessage: message,
+        lastMessageTimestamp: new Date().getTime(),
+        seen: [this.props.user._id]
+      }
     } else {
       // If this chat exists already
       selectedChat = {
         ...selectedChat,
         lastMessage: message,
         lastMessageTimestamp: new Date().getTime(),
-        seen: [this.props.user._id]
-      }
-      let chats = this.state.chats.filter(chat => chat._id !== selectedChat._id);
-      
-      chats.unshift(selectedChat);
-      this.setState({
-        chats: chats,
-        selectedChat: selectedChat
-      })
-      APIService.sendNewMessage(this.state.selectedChat._id, message);
+      }      
     }
+
+    chats.unshift(selectedChat);
+    this.setState({
+      chats: chats,
+      selectedChat: selectedChat
+    })
+    APIService.sendNewMessage(this.state.selectedChat._id, message);
   }
 
   handleNewChatClick = () => {
@@ -239,8 +229,9 @@ class ChatPage extends React.Component {
               chats[i].participants = [this.props.user._id, user._id];
               chats[i].participantNames = {
                 [this.props.user._id]: this.props.user.fullName,
-                [user._id]: user.fullName
+                [user._id]: user.fullName,
               }
+              chats[i].seen = [user._id];
               selectedChat = chats[i];
             }
             this.setState({
