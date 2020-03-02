@@ -39,7 +39,10 @@ const APIService = {
     return post(`/api/chats/${chatId}/messages`, { text });
   },
   searchUsers: (searchTerm) => {
-    return get(`/api/users?q=${searchTerm}`);
+    const params = {
+      q: searchTerm
+    };
+    return get('/api/users', params);
   },
   connectToChatService: () => {
     return post('/api/chats/connect');
