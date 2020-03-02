@@ -1,16 +1,23 @@
 import socketIOClient from 'socket.io-client';
+import { ChatEvent } from '../constants';
 
 class ChatService {
   constructor() {
-    this.listeners = [];
+    this.listeners = {};
     this.socket = null;
+
+    Object.keys(ChatEvent).forEach(ceKey => {
+      this.listeners[ChatEvent[ceKey]] = [];
+    })
   }
 
   connect(userId) {
     this.socket = socketIOClient.connect(`http://localhost:4000/${userId}`);
 
-    this.socket.on('new_message', (data) => {
-      this.listeners.forEach(l => l(data));
+    Object.keys(ChatEvent).forEach(ceKey => {
+      this.socket.on(ChatEvent[ceKey], (data) => {
+        this.listeners[ChatEvent[ceKey]].forEach(l => l(data));
+      })
     })
   }
 
@@ -18,12 +25,12 @@ class ChatService {
     this.socket.disconnect();
   }
 
-  addListener(listener) {
-    this.listeners.push(listener);
+  addListener(eventName, listener) {
+    this.listeners[eventName].push(listener);
   }
 
-  removeListener(listener) {
-    this.listeners = this.listeners.filter(l => l !== listener);
+  removeListener(eventName, listener) {
+    this.listeners[eventName] = this.listeners[eventName].filter(l => l !== listener);
   }
 }
 

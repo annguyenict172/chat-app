@@ -135,10 +135,17 @@ const seenChat = async (req, res, next) => {
     );
   }
 
-  await Chat.update( 
-    { _id: ObjectId(chatId) },
-    { '$addToSet': { 'seen': user._id } }
-  )
+  if (!chat.seen.includes(user._id)) {
+    chat.seen.push(user._id);
+  }
+  await chat.save();
+
+  chat.participants.forEach(participant => {
+    if (participant.toString() !== user._id.toString()) {
+      chatService.sendSeenEvent(participant, chat);
+    }
+  });
+
   return res.json({});
 }
 

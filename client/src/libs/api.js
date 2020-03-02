@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+import { LocalStorageKey } from '../constants';
+
 const getDefaultHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+  'Authorization': `Bearer ${localStorage.getItem(LocalStorageKey.ACCESS_TOKEN)}`,
   'Content-Type': 'application/json'
 });
 

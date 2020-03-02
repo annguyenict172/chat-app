@@ -25,12 +25,28 @@ const TimeDivider = styled.div`
   padding: 10px 0px 20px 0px;
 `;
 
+const SeenIndicator = styled.span`
+  float: right;
+  margin-left: auto;
+  font-size: 12px;
+  color: grey;
+  padding-right: 10px;
+`;
+
 class Messages extends React.Component {
   componentDidUpdate(prevProps, prevStates) {
     if (prevProps.messages.length === 0 && this.props.messages.length > 0) {
       this.scrollToBottom();
-    } else if (prevProps.messages[prevProps.messages.length - 1] !== this.props.messages[this.props.messages.length - 1]) {
+    } else if (prevProps.messages.length && prevProps.messages[0].chatId === this.props.messages[0].chatId) {
       this.scrollToBottom();
+    } else if (
+      prevProps.messages[prevProps.messages.length - 1] !== this.props.messages[this.props.messages.length - 1]
+      && prevProps.messages[prevProps.messages.length - 1] === this.props.messages[this.props.messages.length - 2]
+    ) {
+      const atBottom = this.wrapper.clientHeight + this.wrapper.scrollTop + 80 >= this.wrapper.scrollHeight;
+      if (atBottom) {
+        this.scrollToBottom();
+      }
     } else if (prevProps.messages[0] !== this.props.messages[0]) {
       const numOfNewMessages = this.props.messages.length - prevProps.messages.length;
       let numOfMessageDividers = 0;
@@ -56,7 +72,20 @@ class Messages extends React.Component {
   }
 
   render() {
-    const { user, messages } = this.props;
+    const { user, messages, selectedChat } = this.props;
+
+    if (selectedChat == null || !messages.length) {
+      return <Wrapper></Wrapper>;
+    }
+    let peerId;
+    selectedChat.participants.forEach(participant => {
+      if (participant !== user._id) {
+        peerId = participant;
+      }
+    })
+
+    const peerHasSeen = selectedChat.seen.includes(peerId);
+    
     return (
       <Wrapper 
         onScroll={this.onScroll}
@@ -85,6 +114,9 @@ class Messages extends React.Component {
             )
           }
         })}
+        { peerHasSeen && messages[messages.length - 1].senderId === user._id && 
+          <SeenIndicator>Seen</SeenIndicator>
+        }
         <MessageEndHook ref={(el) => { this.messagesEnd = el; }} />
       </Wrapper>
     )

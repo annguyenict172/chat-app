@@ -18,7 +18,7 @@ const TextWrapper = styled.div`
   flex-grow: 1
 `;
 
-const NewIconWrapper = styled.div`
+const IconWrapper = styled.div`
   margin-right: 10px;
 `;
 
@@ -63,13 +63,16 @@ class ChatPreview extends React.Component {
   render() {
     const { chat, active, user } = this.props;
     let peerName;
+    let peerId;
     Object.keys(chat.participantNames).forEach(userId => {
       if (userId !== user._id) {
         peerName = chat.participantNames[userId];
+        peerId = userId;
         return;
       }
     })
-    const seen = chat.seen.includes(user._id);
+    const iHaveSeen = chat.seen.includes(user._id);
+    const peerHasSeen = chat.seen.includes(peerId);
 
     return (
       <Wrapper 
@@ -80,16 +83,21 @@ class ChatPreview extends React.Component {
           <Avatar size={50} name={peerName} />
         </AvatarWrapper>
         <TextWrapper>
-          <Username seen={seen}>{peerName}</Username>
-          <LastMessageWrapper seen={seen}>
+          <Username seen={iHaveSeen}>{peerName}</Username>
+          <LastMessageWrapper seen={iHaveSeen}>
             <LastMessage>{chat.lastMessage}</LastMessage> • {getLastMessageTimeString(chat.lastMessageTimestamp)}
           </LastMessageWrapper>
         </TextWrapper>
-        { !seen && 
-          <NewIconWrapper>
+        { !iHaveSeen && 
+          <IconWrapper>
             <NewIcon />
-          </NewIconWrapper>
-        }   
+          </IconWrapper>
+        }
+        { iHaveSeen && peerHasSeen && 
+          <IconWrapper>
+            <Avatar size={20} name={peerName}/>
+          </IconWrapper>
+        }      
       </Wrapper>
     )
   }

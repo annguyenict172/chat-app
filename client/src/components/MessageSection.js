@@ -14,6 +14,10 @@ const Wrapper = styled.div`
 `;
 
 class MessageSection extends React.Component {
+  seenChat = () => {
+    this.props.seenChat(this.props.selectedChat);
+  }
+
   render() {
     const { 
       messages, 
@@ -35,6 +39,8 @@ class MessageSection extends React.Component {
           user={user}
           messages={messages}
           loadMoreMessages={loadMoreMessages}
+          seenChat={this.seenChat}
+          selectedChat={selectedChat}
         />
         <ChatBox 
           onNewMessageEntered={this.props.onNewMessageEntered}

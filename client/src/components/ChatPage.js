@@ -6,6 +6,7 @@ import MessageSection from './MessageSection';
 
 import APIService from '../libs/apiService';
 import chatService from '../libs/chatService';
+import { ChatEvent } from '../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,6 +22,23 @@ class ChatPage extends React.Component {
     selectedChat: null,
     messages: [],
     newChat: false
+  }
+
+  handleSeenMessage = (data) => {
+    let chats = [ ...this.state.chats ];
+    let selectedChat = { ...this.state.selectedChat };
+    for (let i = 0; i < chats.length; i++) { 
+      if (chats[i]._id === data.chat._id) {
+        chats[i] = data.chat;
+        if (data.chat._id === selectedChat._id) {
+          selectedChat = data.chat;
+        }
+      }
+    }
+    this.setState({ 
+      chats: chats,
+      selectedChat: selectedChat
+    });
   }
 
   handleComingMessage = (data) => {
@@ -59,7 +77,8 @@ class ChatPage extends React.Component {
     APIService.connectToChatService()
       .then(res => {
         chatService.connect(this.props.user._id);
-        chatService.addListener(this.handleComingMessage);
+        chatService.addListener(ChatEvent.NEW_MESSAGE, this.handleComingMessage);
+        chatService.addListener(ChatEvent.SEEN, this.handleSeenMessage);
       });
   }
 
@@ -93,7 +112,8 @@ class ChatPage extends React.Component {
   }
 
   componentWillUnmount() {
-    chatService.removeListener(this.handleComingMessage);
+    chatService.removeListener(ChatEvent.NEW_MESSAGE, this.handleComingMessage);
+    chatService.removeListener(ChatEvent.SEEN, this.handleSeenMessage);
     chatService.disconnect();
   }
 
@@ -156,7 +176,8 @@ class ChatPage extends React.Component {
       selectedChat = {
         ...selectedChat,
         lastMessage: message,
-        lastMessageTimestamp: new Date().getTime()
+        lastMessageTimestamp: new Date().getTime(),
+        seen: [this.props.user._id]
       }
       let chats = this.state.chats.filter(chat => chat._id !== selectedChat._id);
       
@@ -276,6 +297,7 @@ class ChatPage extends React.Component {
           newChat={newChat}
           onSelectUser={this.handleSelectUser}
           loadMoreMessages={this.loadMoreMessages}
+          seenChat={this.seenChat}
         />
       </Wrapper>
     )
