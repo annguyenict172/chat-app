@@ -21,6 +21,5 @@ Build the production version by running this command `docker-compose -f docker-c
 If you wish to use an external MongoDB server, specify its URI by changing the environment variable `MONGO_URI`. Also remember to remove the `db` service in `docker-compose.yml`.
 
 ### Pending Features
-- Seen functionality with each message
 - Group chat
-- Send images on message
+- Send images with message
