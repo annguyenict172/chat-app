@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileImage } from '@fortawesome/free-solid-svg-icons';
+import { faFileImage, faSmile } from '@fortawesome/free-solid-svg-icons';
+
 
 const Button = styled.a`
   display: inline-block;
@@ -46,9 +49,37 @@ const Input = styled.input`
   }
 `;
 
+const PickerWrapper = styled.div`
+  position: absolute;
+  bottom: 50px;
+  left: 20px;
+`;
+
+const ButtonWrapper = styled.div`
+  position: relative;
+`;
+
+const FileInput = styled.input`
+  visibility: hidden;
+  height: 0;
+  width: 0;
+`;
+
 class ChatBox extends React.Component {
-  state = {
-    message: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: '',
+      showEmojiPicker: false,
+      imageFile: null
+    }
+    this.fileInput = React.createRef();
+  }
+
+  onSelectFile = (e) => {
+    this.setState({ 
+      imageFile: URL.createObjectURL(e.target.files[0])
+    });
   }
 
   onInputChange = (e) => {
@@ -63,12 +94,54 @@ class ChatBox extends React.Component {
     this.setState({ message: '' });
   }
 
+  onEmojiPickerClick = () => {
+    this.setState({ showEmojiPicker: !this.state.showEmojiPicker });
+  }
+
+  onEmojiSelect = (emojiObj) => {
+    const { message } = this.state;
+    const text = `${message} ${emojiObj.native}`;
+    this.setState({ 
+      message: text
+    });
+  }
+
+  onImageUploadClick = () => {
+    this.fileInput.current.click();
+  }
+
   render() {
+    const { showEmojiPicker } = this.state;
     return (
       <Form onSubmit={this.onSubmit}>
-        <Button>
-          <Icon icon={faFileImage} />
-        </Button>
+        <ButtonWrapper onClick={this.onEmojiPickerClick}>
+          <Button >
+            <Icon icon={faSmile} />
+          </Button>
+          { showEmojiPicker === true &&
+            <PickerWrapper>
+              <Picker 
+                darkMode={false}
+                set='emojione'
+                onSelect={this.onEmojiSelect}
+                showPreview={false}
+              />
+            </PickerWrapper>
+          }
+        </ButtonWrapper>
+        <ButtonWrapper onClick={this.onImageUploadClick}>
+          <Button >
+            <Icon icon={faFileImage} />
+          </Button>
+          <FileInput
+            name="image"
+            type="file"
+            required
+            accept="image/*"
+            ref={this.fileInput}
+            onChange={this.onSelectFile}
+          />
+        </ButtonWrapper>
         <Input 
           placeholder="Type a message..."
           onChange={this.onInputChange}
