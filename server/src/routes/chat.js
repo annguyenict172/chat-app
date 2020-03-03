@@ -80,6 +80,7 @@ const newMessage = async (req, res, next) => {
   // Update the chat
   chat.lastMessage = newMessage.text;
   chat.lastMessageTimestamp = newMessage.createdAt;
+  chat.lastMessageSender = user._id;
   chat.seen = [user._id];
   await chat.save();
 

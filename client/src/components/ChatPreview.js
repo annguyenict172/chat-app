@@ -79,7 +79,9 @@ class ChatPreview extends React.Component {
         <TextWrapper>
           <ChatName seen={iHaveSeen}>{chatName}</ChatName>
           <LastMessageWrapper seen={iHaveSeen}>
-            <LastMessage>{chat.lastMessage}</LastMessage> • {getLastMessageTimeString(chat.lastMessageTimestamp)}
+            <LastMessage>
+              {chat.lastMessageSender === user._id ? 'You: ' + chat.lastMessage : chat.lastMessage}
+            </LastMessage> • {getLastMessageTimeString(chat.lastMessageTimestamp)}
           </LastMessageWrapper>
         </TextWrapper>
         { !iHaveSeen && 
@@ -87,7 +89,7 @@ class ChatPreview extends React.Component {
             <NewIcon />
           </IconWrapper>
         }
-        { iHaveSeen && peerHasSeen && 
+        { iHaveSeen && peerHasSeen && chat.lastMessageSender === user._id &&
           <IconWrapper>
             <Avatar size={15} userId={peerIds[0]} />
           </IconWrapper>
