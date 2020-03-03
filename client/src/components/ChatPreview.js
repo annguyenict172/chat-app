@@ -38,6 +38,7 @@ const LastMessageWrapper = styled.div`
 const LastMessage = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   max-width: 150px;
   display: inline-block;
   margin-right: 5px;
