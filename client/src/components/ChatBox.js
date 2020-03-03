@@ -90,6 +90,8 @@ class ChatBox extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    const { message } = this.state;
+    if (message.length === 0 || !message.trim()) return;
     this.props.onNewMessageEntered(this.state.message);
     this.setState({ message: '' });
   }

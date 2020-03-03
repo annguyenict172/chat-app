@@ -57,7 +57,7 @@ router.get('/chats/:chatId/messages', catchError(requireTokenAuth(getMessages)))
 
 // New message
 router.post('/chats/:chatId/messages', [
-  check('text').isString().isLength({ max: 250 })
+  check('text').isString().isLength({ min: 1, max: 250 })
 ], catchError(requireTokenAuth(newMessage)));
 
 module.exports = router;
