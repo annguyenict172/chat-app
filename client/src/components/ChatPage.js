@@ -159,19 +159,15 @@ class ChatPage extends React.Component {
       const res = await APIService.createNewChat(selectedChat.participants, selectedChat.participantNames);
       selectedChat = {
         ...res.data,
-        lastMessage: message,
-        lastMessageTimestamp: new Date().getTime(),
-        seen: [this.props.user._id]
       }
-    } else {
-      // If this chat exists already
-      selectedChat = {
-        ...selectedChat,
-        lastMessage: message,
-        lastMessageTimestamp: new Date().getTime(),
-        seen: [this.props.user._id]
-      }      
-    }
+    } 
+    selectedChat = {
+      ...selectedChat,
+      lastMessage: message,
+      lastMessageTimestamp: new Date().getTime(),
+      lastMessageSender: this.props.user._id,
+      seen: [this.props.user._id]
+    }      
 
     chats.unshift(selectedChat);
     this.setState({
