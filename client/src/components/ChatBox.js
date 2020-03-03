@@ -136,7 +136,6 @@ class ChatBox extends React.Component {
           <FileInput
             name="image"
             type="file"
-            required
             accept="image/*"
             ref={this.fileInput}
             onChange={this.onSelectFile}
