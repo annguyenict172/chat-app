@@ -6,6 +6,8 @@ This project aims to replicate basic functionalities of popular instant messagin
 
 In addition, I made it very simple to host this application on your own by using Docker. If you care about data privacy, you can host this app by yourself and use it with your friends :)
 
+Working application is hosted at [http://165.22.254.55](http://165.22.254.55)
+
 ### Development Guide
 
 1. Install Docker. See this [link](https://docs.docker.com/docker-for-mac/install/) for installation guide on Mac OS.
